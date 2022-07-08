@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+exec concurrently \
+  --kill-others \
+  --names "cat-walkers,bad-birders,dope-dogs" \
+  "dotenv -e ./dev/apps/cat-walkers/.env next dev" \
+  "dotenv -e ./dev/apps/bad-birders/.env next dev" \
+  "dotenv -e ./dev/apps/dope-dogs/.env next dev"
