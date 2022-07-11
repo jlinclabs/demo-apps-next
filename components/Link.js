@@ -1,13 +1,12 @@
 import * as React from 'react'
-import { default as RouterLink } from 'next/link'
+import { default as NextLink } from 'next/link'
 import MUILink from '@mui/material/Link'
 
-const Link = React.forwardRef(({...props}, ref) => {
+const Link = React.forwardRef(({href, ...props}, ref) => {
   props.ref = ref
-  props.component = RouterLink
-  // if (props.to)
-  // if (props.href) props.target = '_blank'
-  return <MUILink {...props}/>
+  return <NextLink href={href}>
+    <MUILink {...props}/>
+  </NextLink>
 })
 
 export default Link

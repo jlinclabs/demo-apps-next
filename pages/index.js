@@ -7,11 +7,15 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 
-import { withSessionSsr } from 'lib/withSession'
-import Layout from 'components/Layout'
-import Link from 'components/Link'
+import { useCurrentUser } from '../lib/currentUser'
+import useView from '../lib/useView'
+import Layout from '../components/Layout'
+import Link from '../components/Link'
+import InspectObject from '../components/InspectObject'
 
 export default function Home() {
+  const { currentUser } = useCurrentUser()
+  const { view: currentUser2 } = useView('currentUser')
   return <Layout>
     <Head>
       <title>Create Next App</title>
@@ -25,11 +29,19 @@ export default function Home() {
           Welcome to {process.env.APP_NAME}
         </Typography>
 
+        <InspectObject object={{ currentUser, currentUser2 }}/>
+
         <Stack spacing={2} direction="column">
-          <Link href="/signup">Signup</Link>
-          <Button variant="text">Text</Button>
-          <Button variant="contained">Contained</Button>
-          <Button variant="outlined">Outlined</Button>
+          <Button
+            variant="contained"
+            component={Link}
+            href="/signup"
+          >Signup</Button>
+          <Button
+            variant="outlined"
+            component={Link}
+            href="/login"
+          >Login</Button>
         </Stack>
 
         <footer>

@@ -1,17 +1,7 @@
-// pages/api/user.ts
+import { withSessionRoute } from 'lib/withSession'
 
-import { withIronSessionApiRoute } from "iron-session/next";
-
-export default withIronSessionApiRoute(
-  function userRoute(req, res) {
-    res.send({ user: req.session.user });
-  },
-  {
-    cookieName: "myapp_cookiename",
-    password: "complex_password_at_least_32_characters_long",
-    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
-    cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
-    },
-  },
-);
+export default withSessionRoute((req, res) => {
+  res.send({
+    user: req.session.user
+  })
+})
