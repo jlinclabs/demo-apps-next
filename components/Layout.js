@@ -13,6 +13,8 @@ import FormGroup from '@mui/material/FormGroup'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 
+import Link from '../components/Link'
+
 export default function Layout({ children }) {
   return (
     <Container
@@ -66,7 +68,7 @@ function TopNav() {
         <MenuIcon />
       </IconButton>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-        {`${process.env.APP_NAME}`}
+        <Link href="/">{`${process.env.APP_NAME}`}</Link>
       </Typography>
       <Typography variant="h7" component="div" sx={{ color: 'orange' }}>
         {'BETA'}

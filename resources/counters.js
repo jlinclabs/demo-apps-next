@@ -1,40 +1,61 @@
+import prisma from '../lib/prisma'
+
 const counters = {
   queries: {
-
+    get ({ userId, id }) {
+      return prisma.counter.findUnique({ where: { userId, id } })
+    },
+    forUser ({ userId }) {
+      return prisma.counter.findUnique({ where: { userId } })
+    },
   },
 
   commands: {
-    inc({ id }){
-
+    create({ userId }){
+      return prisma.counter.create({
+        data: { userId }
+      })
     },
-    dec({ id }){
-
+    inc({ userId, id }){
+      return prisma.counter.update({
+        where: { userId, id },
+        data: { value: { increment: 1 } },
+      })
+    },
+    dec({ userId, id }){
+      return prisma.counter.update({
+        where: { userId, id },
+        data: { value: { decrement: 1 } },
+      })
+    },
+    delete({ userId, id }){
+      return prisma.counter.delete({ where: { userId, id } })
     },
   },
 
   actions: {
-    create(){
-      return {}
+    create({ currentUser }){
+      return counters.commands.create({ userId: currentUser.id })
     },
-    inc({ id }){
-      return counters.commands.inc({ id })
+    inc({ currentUser, id }){
+      return counters.commands.inc({ userId: currentUser.id, id })
     },
-    dec({ id }){
-      return counters.commands.dec({ id })
+    dec({ currentUser, id }){
+      return counters.commands.dec({ userId: currentUser.id, id })
     },
-    destroy(){
-      return {}
+    delete({ currentUser, id }){
+      return counters.commands.delete({ userId: currentUser.id, id })
     },
   },
 
   views: {
     'mine': async ({ currentUser }) => {
-      return []
+      if (!currentUser) return []
+      return counters.queries.forUser({ userId: currentUser.id })
     },
-    ':id': async ({ id }) => {
-      return {
-        count: 42,
-      }
+    ':id': async ({ id, currentUser }) => {
+      if (!currentUser) return null
+      return counters.queries.get({ userId: currentUser.id, id })
     }
   }
 }

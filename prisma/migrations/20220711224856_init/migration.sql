@@ -15,6 +15,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Counter" (
     "id" SERIAL NOT NULL,
+    "value" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" INTEGER NOT NULL,
 
