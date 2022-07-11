@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 
 import Layout from '../components/Layout'
+import Link from '../components/Link'
 
 export default function Home() {
   return <Layout>
@@ -24,6 +25,7 @@ export default function Home() {
         </Typography>
 
         <Stack spacing={2} direction="column">
+          <Link href="/signup">Signup</Link>
           <Button variant="text">Text</Button>
           <Button variant="contained">Contained</Button>
           <Button variant="outlined">Outlined</Button>
