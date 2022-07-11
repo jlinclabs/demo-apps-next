@@ -19,11 +19,11 @@ export default function Layout({ children }) {
       disableGutters
       sx={{
         p: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        width: '100vw',
-        overflow: 'hidden',
+        // display: 'flex',
+        // flexDirection: 'column',
+        // height: '100vh',
+        // width: '100vw',
+        // overflow: 'hidden',
       }}
     >
       <TopNav />

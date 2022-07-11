@@ -7,6 +7,15 @@ const users = {
 
   },
 
+  actions: {
+    signup(){
+
+    },
+    login(){
+
+    },
+  },
+
   views: {
     'current': async ({ currentUser }) => {
       return currentUser || null
