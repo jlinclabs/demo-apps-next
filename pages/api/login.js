@@ -1,5 +1,11 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { withSessionRoute } from 'lib/withSession'
 
-export default function handler(req, res) {
-  res.status(200).json({ name: 'John Doe' })
-}
+export default withSessionRoute(async (req, res) => {
+  // get user from database then:
+  req.session.user = {
+    id: 230,
+    admin: true,
+  };
+  await req.session.save();
+  res.send({ ok: true });
+});

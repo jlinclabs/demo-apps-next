@@ -19,6 +19,7 @@
     "dotenv": "^16.0.1",
     "dotenv-cli": "^5.1.0",
     "import-modules": "^3.1.0",
+    "iron-session": "^6.1.3",
     "jlinx-client": "github:jlinclabs/jlinx-client#6174c47c6843bd9efdc05c5bbe830ff597c4cf7d",
     "next": "12.1.6",
     "path-to-regexp": "^6.2.1",

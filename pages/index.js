@@ -7,8 +7,9 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 
-import Layout from '../components/Layout'
-import Link from '../components/Link'
+import { withSessionSsr } from 'lib/withSession'
+import Layout from 'components/Layout'
+import Link from 'components/Link'
 
 export default function Home() {
   return <Layout>
@@ -44,3 +45,5 @@ export default function Home() {
     </Container>
   </Layout>
 }
+
+
