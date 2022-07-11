@@ -1,13 +1,47 @@
-import views from '../../../views/*'
+const { pathToRegexp } = require('path-to-regexp')
+import { withSessionRoute } from '../../../lib/withSession'
+import resources from '../../../resources'
 
-console.log('!!views', views)
+console.log('!!resources', resources)
 
-export default async function(req, res) {
+export default withSessionRoute(async (req, res) => {
+
   const viewId = req.query.viewId.join('/')
   console.log('GET VIEW', { viewId })
 
-  res.status(200).json({
+  const [resourceName, viewPart] = parseViewId(viewId)
+  console.log({ resourceName, viewPart })
+
+  const resource = resources[resourceName]
+  if (!resource){
+    return res.status(400).json({
+      error: `unknown view "${viewId}"`
+    })
+  }
+
+  console.log({ resource })
+
+  for (const viewPattern in resource.views){
+    const keys = []
+    const regexp = pathToRegexp(viewPattern, keys)
+    const matches = regexp.exec(viewPart)
+    if (!matches) continue
+    const params = {}
+    keys.forEach((key, index) => {
+      params[key.name] = matches[index + 1];
+    })
+    const value = await resource.views[viewPattern]({
+      ...params,
+      currentUser: req.session.user,
+    })
+    console.log({ value })
+    res.status(200).json(value)
+    return
+  }
+
+  res.status(404).json({
     viewId,
+    currentUser: req.session.user,
   })
   // const resource = await resources.get(viewId)
   // if (!resource){
@@ -29,4 +63,11 @@ export default async function(req, res) {
   //   unsub()
   //   console.log(`RESOURCE CLOSED`, { resourceId });
   // })
+})
+
+
+
+function parseViewId(actionOrViewId) {
+  const matches = actionOrViewId.match(/^([^\.]+)\.(.+$)/);
+  return matches ? [matches[1], matches[2]] : [];
 }

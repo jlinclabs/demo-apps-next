@@ -15,7 +15,7 @@ import InspectObject from '../components/InspectObject'
 
 export default function Home() {
   const { currentUser } = useCurrentUser()
-  const { view: currentUser2 } = useView('currentUser')
+  const { view: currentUser2 } = useView('users.current')
   return <Layout>
     <Head>
       <title>Create Next App</title>
