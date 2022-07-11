@@ -1,4 +1,8 @@
 const nextConfig = {
+  httpAgentOptions: {
+    keepAlive: true,
+  },
+
   // reactStrictMode: true,
   env: {
     APP_NAME: process.env.APP_NAME,
