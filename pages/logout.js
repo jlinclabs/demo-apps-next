@@ -13,7 +13,7 @@ export default function Home() {
   })
 
   const logout = useAction('session.logout')
-  useEffect(() => { logout() }, [logout])
+  useEffect(() => { logout() }, [])
 
   return <Layout>
     <Head>

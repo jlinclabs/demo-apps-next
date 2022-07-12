@@ -47,12 +47,7 @@ function LoginForm({ reloadCurrentUser }){
 
   const login = useAction('session.login', {
     onSuccess(){
-      reloadCurrentUser
-      debugger
-      // router.push('/')
-    },
-    onFailure(){
-
+      reloadCurrentUser()
     },
   })
 
