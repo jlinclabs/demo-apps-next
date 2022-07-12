@@ -20,7 +20,10 @@ const sessionResource = {
   },
 
   commands: {
-    async create(userId){
+    async create(){
+      return await prisma.session.create({ data: {} })
+    },
+    async touch(sessionId){
       return await prisma.session.create({
         data: { userId }
       })
