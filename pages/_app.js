@@ -5,6 +5,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material'
 import createEmotionCache from '../lib/createEmotionCache'
 import darkTheme from '../styles/themes/darkTheme'
 import '../styles/globals.css'
+console.log({ darkTheme })
 
 const clientSideEmotionCache = createEmotionCache()
 

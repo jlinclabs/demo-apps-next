@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Box from '@mui/material/Box'
 
-export default function InspectObject({ object }){
+export default function InspectObject({ object, sx, ...props }){
   let string
   if (typeof object === 'function'){
     string = object.toString()
@@ -19,9 +19,14 @@ export default function InspectObject({ object }){
     sx={{
       m: 1,
       backgroundColor: 'background.paper',
+      overflow: 'auto',
+      whiteSpace: 'pre',
+      fontFamily: 'monospace, mono',
+      ...sx,
     }}
+    {...props}
   >
-    <pre><code>{string}</code></pre>
+    {string}
   </Box>
 }
 
