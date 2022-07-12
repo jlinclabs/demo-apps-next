@@ -1,47 +1,27 @@
 import { useState } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-
-
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import Input from '@mui/material/Input'
-import FormHelperText from '@mui/material/FormHelperText'
-
-import { useAction } from '../lib/actions'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
-import useView from '../lib/views'
-import { useCurrentUser } from '../lib/session'
+import { useCurrentUser, useSignup } from '../lib/session'
 
-export default function Home() {
-  const { currentUser } = useCurrentUser({
-    // redirectIfNotFound: '/',
+export default function Signup() {
+  useCurrentUser({
     redirectToIfFound: '/',
   })
 
-  return <Layout>
-    <Head>
-      <title>Signup</title>
-      <meta name="description" content="Signup" />
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-
-    <Container maxWidth="sm" sx={{p: 2}}>
+  return <Layout title="Signup">
+    <Container maxWidth="sm">
       <SignupForm />
-      <InspectObject object={{ currentUser }}/>
     </Container>
-
   </Layout>
 }
 
@@ -50,14 +30,7 @@ function SignupForm(){
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
-  const signup = useAction('session.signup', {
-    onSuccess(){
-
-    },
-    onFailure(){
-
-    },
-  })
+  const signup = useSignup()
 
   const onSubmit = event => {
     event.preventDefault()

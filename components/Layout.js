@@ -109,7 +109,7 @@ function SideNav() {
   return <Box sx={{
     // backgroundColor: 'success.main',
     backgroundColor: 'primary.dark',
-    maxWidth: `max(20vw, 200px)`,
+    maxWidth: `max(20vw, 400px)`,
     overflowX: 'auto',
   }}>
     <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
