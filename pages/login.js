@@ -12,7 +12,8 @@ import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import { useCurrentUser, useLogin } from '../lib/session'
 
-export default function Login() {
+export default function Login(props) {
+  console.log('?!?!!', props)
   useCurrentUser({
     redirectToIfFound: '/',
   })
