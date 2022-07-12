@@ -1,18 +1,14 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
 import Container from '@mui/material/Container'
-import useAction from '../lib/useAction'
 import Layout from '../components/Layout'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
-import { useCurrentUser } from '../lib/currentUser'
+import { useCurrentUser, useLogout } from '../lib/session'
 
 export default function Home() {
-  const { currentUser } = useCurrentUser({
-    redirectToIfNotFound: '/',
-  })
-
-  const logout = useAction('session.logout')
+  useCurrentUser({ redirectToIfNotFound: '/' })
+  const logout = useLogout()
   useEffect(() => { logout() }, [])
 
   return <Layout>
@@ -25,8 +21,6 @@ export default function Home() {
     <Container maxWidth="sm" sx={{p: 2}}>
       <span>Logging out…</span>
       <ErrorMessage error={logout.error}/>
-      <InspectObject object={{ currentUser }}/>
     </Container>
-
   </Layout>
 }

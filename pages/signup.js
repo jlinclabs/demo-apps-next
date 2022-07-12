@@ -21,8 +21,8 @@ import Layout from '../components/Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
-import useView from '../lib/useView'
-import { useCurrentUser } from '../lib/currentUser'
+import useView from '../lib/views'
+import { useCurrentUser } from '../lib/session'
 
 export default function Home() {
   const { currentUser } = useCurrentUser({

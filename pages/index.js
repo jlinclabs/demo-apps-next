@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 
-import { useCurrentUser } from '../lib/currentUser'
+import { useCurrentUser } from '../lib/session'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
 import InspectObject from '../components/InspectObject'

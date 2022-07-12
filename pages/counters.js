@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 
-import { useCurrentUser } from '../lib/currentUser'
+import { useCurrentUser } from '../lib/session'
 import useView from '../lib/useView'
 import useAction from '../lib/useAction'
 import Layout from '../components/Layout'
