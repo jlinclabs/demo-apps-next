@@ -22,10 +22,13 @@ import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
 import useView from '../lib/useView'
+import { useCurrentUser } from '../lib/currentUser'
 
 export default function Home() {
-  const { view: session } = useView('session.current')
-  const { view: currentUser } = useView('session.currentUser')
+  const { currentUser } = useCurrentUser({
+    // redirectIfNotFound: '/',
+    redirectToIfFound: '/',
+  })
 
   return <Layout>
     <Head>
@@ -36,7 +39,7 @@ export default function Home() {
 
     <Container maxWidth="sm" sx={{p: 2}}>
       <SignupForm />
-      <InspectObject object={{ session, currentUser }}/>
+      <InspectObject object={{ currentUser }}/>
     </Container>
 
   </Layout>
@@ -102,7 +105,7 @@ function SignupForm(){
       type="password"
       value={passwordConfirmation}
       onChange={e => { setPasswordConfirmation(e.target.value) }}
-      error={passwordConfirmation && passwordConfirmation !== password}
+      error={!!(passwordConfirmation && passwordConfirmation !== password)}
     />
     <Stack spacing={2} direction="row-reverse" justifyContent="flex-end">
       <Button type="submit" variant="contained" >Submit</Button>

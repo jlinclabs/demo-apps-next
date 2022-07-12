@@ -15,7 +15,6 @@ import InspectObject from '../components/InspectObject'
 
 export default function Home() {
   const { currentUser } = useCurrentUser()
-  const { view: currentUser2 } = useView('users.current')
   return <Layout>
     <Head>
       <title>Create Next App</title>
@@ -29,7 +28,7 @@ export default function Home() {
           Welcome to {process.env.APP_NAME}
         </Typography>
 
-        <InspectObject object={{ currentUser, currentUser2 }}/>
+        <InspectObject object={{ currentUser }}/>
 
         <Stack spacing={2} direction="column">
           <Button
