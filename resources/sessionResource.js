@@ -4,6 +4,7 @@ import users from './usersResource'
 
 const sessionResource = {
   actions: {
+
     async signup({ session, email, password }){
       const passwordSalt = await bcrypt.genSalt(10)
       const passwordHash = await bcrypt.hash(password, passwordSalt)
@@ -16,8 +17,8 @@ const sessionResource = {
       })
       session.userId = user.id;
       await session.save();
-      return {}
     },
+
     async login({ session, email, password }){
       const user = await prisma.user.findUnique({
         where: { email }
@@ -26,8 +27,13 @@ const sessionResource = {
       console.log({ match })
       session.userId = user.id;
       await session.save();
-      return {}
     },
+
+    async logout({ session }){
+      console.log({ session }, {...session})
+      delete session.userId
+      await session.save();
+    }
   },
 
   views: {

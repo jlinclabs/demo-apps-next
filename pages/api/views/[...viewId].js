@@ -2,12 +2,10 @@ const { pathToRegexp } = require('path-to-regexp')
 import { withSessionRoute } from '../../../lib/withSession'
 import resources from '../../../resources'
 
-console.log('!!resources', resources)
-
 export default withSessionRoute(async (req, res) => {
-
+  const subId = req.query.subId
   const viewId = req.query.viewId.join('/')
-  console.log('GET VIEW', { viewId })
+  console.log('GET VIEW', { subId, viewId })
 
   const [resourceName, viewPart] = parseViewId(viewId)
   console.log({ resourceName, viewPart })
@@ -39,6 +37,9 @@ export default withSessionRoute(async (req, res) => {
     return res.status(404).json({ notFound: true, viewId })
   }
 
+  req.on('close', () => {
+    console.log(`VIEW CLOSED`, { subId, viewId });
+  })
 
   res.writeHead(200, {
     'Content-Encoding': 'none',
@@ -48,35 +49,51 @@ export default withSessionRoute(async (req, res) => {
     'X-Accel-Buffering': 'no',
   })
 
-  // const unsub = resource.onChange(value => {
-  //   console.log('VIEW UNSUB', value)
-  //   res.write(`data: ${JSON.stringify(value)}\n\n`)
-  // })
-  let intervalId
-  const unsub = () => { clearInterval(intervalId) }
-
-  req.on('close', () => {
-    unsub()
-    console.log(`VIEW CLOSED`, { viewId });
-  })
-
   const emit = data => {
     res.write(
-      `event: update\ndata: ${JSON.stringify(data)}\n\n`
+      // `event: update\ndata: ${JSON.stringify(data)}\n\n`
+      `data: ${JSON.stringify(data)}\n\n`
     )
   }
 
   const update = async () => {
+    console.log('VIEW UPDATE???', subId, {
+      'req.__CLOSED': req.__CLOSED,
+      'res.complete': res.complete,
+    })
+    // req.open?
+    // todo get latest session
     const value = await resource.views[view.pattern]({
       ...view.params,
       session: req.session,
       currentUser: req.session.user,
     })
-    console.log({ value })
+    console.log('VIEW CHANGE', { subId, [viewId]: value })
     emit(value)
   }
 
-  intervalId = setInterval(update, 1000)
+  // const unsub = resource.onChange(value => {
+  //   console.log('VIEW UNSUB', value)
+  //   res.write(`data: ${JSON.stringify(value)}\n\n`)
+  // })
+  let intervalId
+  // TMP use postgres
+  intervalId = setInterval(
+    () => {
+      update()
+    },
+    10000
+  )
+  const unsub = () => { clearInterval(intervalId) }
+
+  req.on('close', () => {
+    req.__CLOSED = true
+    unsub()
+    console.log(`VIEW CLOSED`, { subId, viewId });
+  })
+
+  await update()
+
 
 
 })

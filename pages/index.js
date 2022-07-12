@@ -38,6 +38,11 @@ export default function Home() {
               component={Link}
               href="/counters"
             >Counters</Button>
+            <Button
+              variant="text"
+              component={Link}
+              href="/logout"
+            >logout</Button>
           </Box>
           : <Stack spacing={2} direction="column">
             <Button

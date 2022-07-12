@@ -6,7 +6,7 @@ console.log('!!resources', resources)
 export default withSessionRoute(async (req, res) => {
   try{
     const actionId = req.query.actionId.join('/')
-    const options = JSON.parse(req.body)
+    const options = req.body ? JSON.parse(req.body) : {}
     console.log('TAKE ACTION', {
       actionId,
       options,
@@ -30,7 +30,9 @@ export default withSessionRoute(async (req, res) => {
       currentUser: req.session.user,
     })
     console.log({ result })
-    return res.status(200).json(result)
+    return res.status(200).json(
+      typeof result === 'undefined' ? {} : result
+    )
 
   }catch(error){
     console.error(error)
