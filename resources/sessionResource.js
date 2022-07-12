@@ -23,14 +23,15 @@ const sessionResource = {
     async create(){
       return await prisma.session.create({ data: {} })
     },
-    async touch(sessionId){
-      return await prisma.session.create({
-        data: { userId }
+    async touch(id){
+      return await prisma.session.update({
+        where: { id },
+        data: { lastSeenAt: new Date }
       })
     },
-    async delete(sessionId){
+    async delete(id){
       return await prisma.session.delete({
-        where: { id: sessionId }
+        where: { id }
       })
     }
   },
