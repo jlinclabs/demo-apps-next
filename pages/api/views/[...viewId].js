@@ -21,49 +21,64 @@ export default withSessionRoute(async (req, res) => {
 
   console.log({ resource })
 
-  for (const viewPattern in resource.views){
+  let view
+  for (const pattern in resource.views){
     const keys = []
-    const regexp = pathToRegexp(viewPattern, keys)
+    const regexp = pathToRegexp(pattern, keys)
     const matches = regexp.exec(viewPart)
     if (!matches) continue
     const params = {}
     keys.forEach((key, index) => {
       params[key.name] = matches[index + 1];
     })
-    const value = await resource.views[viewPattern]({
-      ...params,
+    view = { pattern, params }
+    break
+  }
+
+  if (!view) {
+    return res.status(404).json({ notFound: true, viewId })
+  }
+
+
+  res.writeHead(200, {
+    'Content-Encoding': 'none',
+    'Content-Type': 'text/event-stream',
+    'Connection': 'keep-alive',
+    'Cache-Control': 'no-cache',
+    'X-Accel-Buffering': 'no',
+  })
+
+  // const unsub = resource.onChange(value => {
+  //   console.log('VIEW UNSUB', value)
+  //   res.write(`data: ${JSON.stringify(value)}\n\n`)
+  // })
+  let intervalId
+  const unsub = () => { clearInterval(intervalId) }
+
+  req.on('close', () => {
+    unsub()
+    console.log(`VIEW CLOSED`, { viewId });
+  })
+
+  const emit = data => {
+    res.write(
+      `event: update\ndata: ${JSON.stringify(data)}\n\n`
+    )
+  }
+
+  const update = async () => {
+    const value = await resource.views[view.pattern]({
+      ...view.params,
       session: req.session,
       currentUser: req.session.user,
     })
     console.log({ value })
-    res.status(200).json(value)
-    return
+    emit(value)
   }
 
-  res.status(404).json({
-    viewId,
-    currentUser: req.session.user,
-  })
-  // const resource = await resources.get(viewId)
-  // if (!resource){
-  //   return res.status(404).json({ notFound: viewId })
-  // }
-  // const unsub = resource.onChange(value => {
-  //   console.log('RESOURCE UPDATE', value)
-  //   res.write(`data: ${JSON.stringify(value)}\n\n`)
-  // })
+  intervalId = setInterval(update, 1000)
 
-  // res.writeHead(200, {
-  //   'Content-Encoding': 'none',
-  //   'Content-Type': 'text/event-stream',
-  //   'Connection': 'keep-alive',
-  //   'Cache-Control': 'no-cache'
-  // })
 
-  // req.on('close', () => {
-  //   unsub()
-  //   console.log(`RESOURCE CLOSED`, { resourceId });
-  // })
 })
 
 
