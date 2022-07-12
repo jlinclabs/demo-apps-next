@@ -6,14 +6,22 @@ const sessionResource = {
 
   queries: {
     async get(sessionId){
+      console.log('\n\n\n RAW????', prisma.session.raw)
       return await prisma.session.findUnique({
         where: { id: sessionId },
         select: {
           id: true,
           createdAt: true,
           lastSeenAt: true,
-          user: true,
           userId: true,
+          user: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              createdAt: true,
+            }
+          },
         }
       })
     }
@@ -29,6 +37,12 @@ const sessionResource = {
         data: { lastSeenAt: new Date }
       })
     },
+    async setUserId(id, userId){
+      return await prisma.session.update({
+        where: { id },
+        data: { userId }
+      })
+    },
     async delete(id){
       return await prisma.session.delete({
         where: { id }
@@ -39,6 +53,9 @@ const sessionResource = {
   actions: {
 
     async signup({ session, email, password }){
+      if (session.userId){
+        throw new Error(`please logout first`)
+      }
       const passwordSalt = await bcrypt.genSalt(10)
       const passwordHash = await bcrypt.hash(password, passwordSalt)
       const user = await prisma.user.create({
@@ -48,8 +65,8 @@ const sessionResource = {
           passwordSalt,
         }
       })
-      session.userId = user.id;
-      await session.save();
+      await session.setUserId(user.id)
+      // await session.save();
     },
 
     async login({ session, email, password }){
@@ -57,15 +74,12 @@ const sessionResource = {
         where: { email }
       })
       const match = await bcrypt.compare(password, user.passwordHash)
-      console.log({ match })
-      session.userId = user.id;
-      await session.save();
+      if (!match){ throw new Error(`invalid email or password`)}
+      await session.setUserId(user.id)
     },
 
     async logout({ session }){
-      console.log({ session }, {...session})
-      delete session.userId
-      await session.save();
+      await session.delete()
     }
   },
 
@@ -75,16 +89,17 @@ const sessionResource = {
     },
 
     'currentUser': async ({ session }) => {
-      if (!session.userId) return null
-      return await prisma.user.findUnique({
-        where: { id: session.userId },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          createdAt: true,
-        }
-      })
+      return session.user || null
+      // if (!session.userId) return null
+      // return await prisma.user.findUnique({
+      //   where: { id: session.userId },
+      //   select: {
+      //     id: true,
+      //     email: true,
+      //     name: true,
+      //     createdAt: true,
+      //   }
+      // })
     },
   }
 }

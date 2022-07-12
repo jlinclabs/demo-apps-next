@@ -3,13 +3,11 @@ import { withSessionRoute } from '../../../lib/withSession'
 import resources from '../../../resources'
 
 export default withSessionRoute(async (req, res) => {
-  console.log('GET VIEW', {session: req.session})
   const subId = req.query.subId
   const viewId = req.query.viewId.join('/')
   console.log('GET VIEW', { subId, viewId })
 
   const [resourceName, viewPart] = parseViewId(viewId)
-  console.log({ resourceName, viewPart })
 
   const resource = resources[resourceName]
   if (!resource){
@@ -17,8 +15,6 @@ export default withSessionRoute(async (req, res) => {
       error: `unknown view "${viewId}"`
     })
   }
-
-  console.log({ resource })
 
   let view
   for (const pattern in resource.views){

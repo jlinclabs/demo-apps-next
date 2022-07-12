@@ -1,8 +1,6 @@
 import { withSessionRoute } from '../../../lib/withSession'
 import resources from '../../../resources'
 
-console.log('!!resources', resources)
-
 export default withSessionRoute(async (req, res) => {
   try{
     const actionId = req.query.actionId.join('/')
