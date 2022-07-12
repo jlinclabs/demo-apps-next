@@ -16,8 +16,11 @@ import InputLabel from '@mui/material/InputLabel'
 import Input from '@mui/material/Input'
 import FormHelperText from '@mui/material/FormHelperText'
 
+import useAction from '../lib/useAction'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
+import ErrorMessage from '../components/ErrorMessage'
+import InspectObject from '../components/InspectObject'
 
 export default function Home() {
   return <Layout>
@@ -39,23 +42,27 @@ function SignupForm(){
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
-  const signupAction = useAction('session.signup', {
-    onSuccess
-    onFailure
+  const signup = useAction('session.signup', {
+    onSuccess(){
+
+    },
+    onFailure(){
+
+    },
   })
 
   const onSubmit = event => {
     event.preventDefault()
-    signupAction.call({ email, password })
+    signup({ email, password })
   }
-  const disabled = false
+  const disabled = !!signup.pending
   return <Paper {...{
     component: 'form',
     onSubmit,
     sx: { m: 2, p: 2 }
   }}>
     <Typography variant="h4">Signup</Typography>
-
+    <ErrorMessage error={signup.error}/>
     <TextField
       autoFocus
       label="Email"
@@ -69,7 +76,6 @@ function SignupForm(){
       value={email}
       onChange={e => { setEmail(e.target.value) }}
     />
-
     <TextField
       label="Password"
       disabled={disabled}
@@ -81,8 +87,6 @@ function SignupForm(){
       value={password}
       onChange={e => { setPassword(e.target.value) }}
     />
-
-
     <TextField
       label="Password Confirmation"
       disabled={disabled}
@@ -95,11 +99,12 @@ function SignupForm(){
       onChange={e => { setPasswordConfirmation(e.target.value) }}
       error={passwordConfirmation && passwordConfirmation !== password}
     />
-
     <Stack spacing={2} direction="row-reverse" justifyContent="flex-end">
       <Button type="submit" variant="contained" >Submit</Button>
       <Button variant="text" component={Link} href="/login">login</Button>
       <Button variant="text" component={Link} href="/reset-password" color="secondary">reset password</Button>
     </Stack>
+
+    <InspectObject object={{...signup}}/>
   </Paper>
 }

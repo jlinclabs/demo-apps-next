@@ -13,12 +13,16 @@ export default withSessionRoute(async (req, res) => {
   const resource = resources[resourceName]
   if (!resource){
     return res.status(404).json({
-      error: `unknown resource "${resourceName}"`
+      error: {
+        message: `unknown resource "${resourceName}"`
+      }
     })
   }
   if (!resource.actions || !resource.actions[actionName]){
     return res.status(404).json({
-      error: `unknown action "${actionId}"`
+      error: {
+        message: `unknown action "${actionId}"`
+      }
     })
   }
 
