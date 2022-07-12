@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import useAction from '../lib/useAction'
+import { useAction } from '../lib/actions'
 
 export default function ActionForm({
   children,

@@ -16,7 +16,7 @@ import InputLabel from '@mui/material/InputLabel'
 import Input from '@mui/material/Input'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import useAction from '../lib/useAction'
+import { useAction } from '../lib/actions'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
