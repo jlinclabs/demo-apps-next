@@ -6,9 +6,9 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
 
 import { useCurrentUser } from '../lib/currentUser'
-import useView from '../lib/useView'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
 import InspectObject from '../components/InspectObject'
@@ -29,9 +29,16 @@ export default function Home() {
         </Typography>
 
         {currentUser
-          ? <Typography variant="h4">
-            Welcome back {currentUser.email}
-          </Typography>
+          ? <Box>
+            <Typography variant="h4">
+              Welcome back {currentUser.email}
+            </Typography>
+            <Button
+              variant="contained"
+              component={Link}
+              href="/counters"
+            >Counters</Button>
+          </Box>
           : <Stack spacing={2} direction="column">
             <Button
               variant="contained"
