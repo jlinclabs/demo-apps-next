@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt'
 import prisma from '../lib/prisma'
-import { watchQuery } from '../lib/postgres'
 
 const sessionResource = {
 
