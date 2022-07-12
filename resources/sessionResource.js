@@ -36,6 +36,7 @@ const sessionResource = {
       })
     },
     async setUserId(id, userId){
+      console.log('setUserId', {id, userId})
       return await prisma.session.update({
         where: { id },
         data: { userId }

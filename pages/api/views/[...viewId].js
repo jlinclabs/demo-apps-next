@@ -35,13 +35,22 @@ export default withSessionRoute(async (req, res) => {
     })
   }
 
-  const value = await resource.views[view.pattern]({
-    ...view.params,
-    session: req.session,
-    currentUser: req.session.user,
-  })
+  try{
+    const value = await resource.views[view.pattern]({
+      ...view.params,
+      session: req.session,
+      currentUser: req.session.user,
+    })
 
-  res.status(200).json({ value })
+    res.status(200).json({ value })
+  }catch(error){
+    res.status(500).json({
+      error: {
+        message: error.message,
+        stack: error.stack,
+      }
+    })
+  }
 
 })
 
