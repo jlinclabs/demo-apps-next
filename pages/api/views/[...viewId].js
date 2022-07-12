@@ -32,6 +32,7 @@ export default withSessionRoute(async (req, res) => {
     })
     const value = await resource.views[viewPattern]({
       ...params,
+      session: req.session,
       currentUser: req.session.user,
     })
     console.log({ value })

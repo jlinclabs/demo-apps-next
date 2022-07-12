@@ -21,8 +21,12 @@ import Layout from '../components/Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
 import InspectObject from '../components/InspectObject'
+import useView from '../lib/useView'
 
 export default function Home() {
+  const { view: session } = useView('session.current')
+  const { view: currentUser } = useView('session.currentUser')
+
   return <Layout>
     <Head>
       <title>Signup</title>
@@ -32,6 +36,7 @@ export default function Home() {
 
     <Container maxWidth="sm" sx={{p: 2}}>
       <SignupForm />
+      <InspectObject object={{ session, currentUser }}/>
     </Container>
 
   </Layout>

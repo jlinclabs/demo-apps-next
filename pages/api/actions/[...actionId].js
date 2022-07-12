@@ -7,7 +7,11 @@ export default withSessionRoute(async (req, res) => {
   try{
     const actionId = req.query.actionId.join('/')
     const options = JSON.parse(req.body)
-    console.log('TAKE ACTION', { actionId, options })
+    console.log('TAKE ACTION', {
+      actionId,
+      options,
+      session: req.session,
+    })
 
     const [resourceName, actionName] = parseActionId(actionId)
     console.log({ resourceName, actionName })
@@ -22,6 +26,7 @@ export default withSessionRoute(async (req, res) => {
 
     const result = await resource.actions[actionName]({
       ...options,
+      session: req.session,
       currentUser: req.session.user,
     })
     console.log({ result })
