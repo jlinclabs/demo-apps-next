@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 
@@ -18,8 +19,8 @@ import InspectObject from '../components/InspectObject'
 import useView from '../lib/useView'
 import { useCurrentUser } from '../lib/currentUser'
 
-export default function Home() {
-  const { currentUser } = useCurrentUser({
+export default function Login() {
+  const { currentUser, mutate: reloadCurrentUser } = useCurrentUser({
     redirectToIfFound: '/',
   })
 
@@ -31,20 +32,24 @@ export default function Home() {
     </Head>
 
     <Container maxWidth="sm" sx={{p: 2}}>
-      <LoginForm />
+      <LoginForm {...{ reloadCurrentUser }} />
       <InspectObject object={{ currentUser }}/>
     </Container>
 
   </Layout>
 }
 
-function LoginForm(){
+function LoginForm({ reloadCurrentUser }){
+  const router = useRouter()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const login = useAction('session.login', {
     onSuccess(){
-
+      reloadCurrentUser
+      debugger
+      // router.push('/')
     },
     onFailure(){
 
