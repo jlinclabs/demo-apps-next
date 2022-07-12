@@ -28,20 +28,26 @@ export default function Home() {
           Welcome to {process.env.APP_NAME}
         </Typography>
 
+        {currentUser
+          ? <Typography variant="h4">
+            Welcome back {currentUser.email}
+          </Typography>
+          : <Stack spacing={2} direction="column">
+            <Button
+              variant="contained"
+              component={Link}
+              href="/signup"
+            >Signup</Button>
+            <Button
+              variant="outlined"
+              component={Link}
+              href="/login"
+            >Login</Button>
+          </Stack>
+        }
+
         <InspectObject object={{ currentUser }}/>
 
-        <Stack spacing={2} direction="column">
-          <Button
-            variant="contained"
-            component={Link}
-            href="/signup"
-          >Signup</Button>
-          <Button
-            variant="outlined"
-            component={Link}
-            href="/login"
-          >Login</Button>
-        </Stack>
 
         <footer>
           <a
