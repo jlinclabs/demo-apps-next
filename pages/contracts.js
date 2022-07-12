@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+
 import Layout from '../components/Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
@@ -17,7 +18,23 @@ export default function Contracts() {
   const loggedIn = useRequireLoggedIn()
 
   return <Layout title="Contracts">
-    Contracts!
+    <Container maxwidth="lg">
+      <Typography variant="h3">Contracts</Typography>
+
+      <Stack spacing={2} sx={{maxWidth: '400px'}}>
+        <Button
+          variant="contained"
+          component={Link}
+          href="/contracts/offer"
+        >{`Offer Contract`}</Button>
+        <Button
+          variant="contained"
+          component={Link}
+          href="/contracts/sign"
+          sx={{ml: 1}}
+        >{`Sign Offered Contract`}</Button>
+      </Stack>
+    </Container>
   </Layout>
 }
 
