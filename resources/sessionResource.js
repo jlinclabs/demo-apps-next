@@ -1,12 +1,11 @@
 import bcrypt from 'bcrypt'
 import prisma from '../lib/prisma'
-// import users from './usersResource'
+import { watchQuery } from '../lib/postgres'
 
 const sessionResource = {
 
   queries: {
     async get(sessionId){
-      console.log('\n\n\n RAW????', prisma.session.raw)
       return await prisma.session.findUnique({
         where: { id: sessionId },
         select: {
