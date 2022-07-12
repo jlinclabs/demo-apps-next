@@ -8,16 +8,15 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 
-import Layout from '../components/Layout'
-import Link from '../components/Link'
-import ErrorMessage from '../components/ErrorMessage'
-import InspectObject from '../components/InspectObject'
-import { useRequireLoggedIn } from '../lib/session'
+import Layout from '../../components/Layout'
+import Link from '../../components/Link'
+import ErrorMessage from '../../components/ErrorMessage'
+import InspectObject from '../../components/InspectObject'
 
-export default function Contracts() {
-  const loggedIn = useRequireLoggedIn()
+export default function Contracts(props) {
+  console.log('PAGE/contacts/index', props)
 
-  return <Layout title="Contracts">
+  return <Layout title="Contracts" requireLoggedIn>
     <Container maxwidth="lg">
       <Typography variant="h3">Contracts</Typography>
 
@@ -38,3 +37,11 @@ export default function Contracts() {
   </Layout>
 }
 
+export async function getServerSideProps(context) {
+  console.log('???context??', context)
+  return {
+    props: {
+      __SERVER_SIDE_PROPS: 'yup yup'
+    }, // will be passed to the page component as props
+  }
+}

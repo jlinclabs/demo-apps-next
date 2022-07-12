@@ -38,7 +38,15 @@ export default function Layout(props) {
     title = 'JLINX Demo',
     description = 'JLINX Demo',
     favicon = '/favicon.ico',
+    requireNotLoggedIn = false,
+    requireLoggedIn = false,
   } = props
+  const { currentUser, loading } = useCurrentUser({
+    redirectToIfFound: requireNotLoggedIn ? '/' : undefined,
+    redirectToIfNotFound: requireLoggedIn ? '/login' : undefined,
+  })
+  console.log(`currentUser => ${JSON.stringify(currentUser)}`)
+
   return (
     <Box
       sx={{
@@ -61,22 +69,24 @@ export default function Layout(props) {
         minHeight: '100vh',
         minWidth: '100vw',
       }}>
-        <SideNav/>
+        <SideNav {...{ loading, currentUser }}/>
         <Box sx={{
           flex: '1 1'
-        }}>{children}</Box>
+        }}>{
+          loading
+            ? <span>loading…</span>
+            : children
+        }</Box>
       </Box>
     </Box>
   )
 }
 
 
-function SideNav() {
-  const { currentUser } = useCurrentUser()
-  console.log(`currentUser => ${JSON.stringify(currentUser)}`)
-
-  const navButtons = currentUser
-    ? [
+function SideNav({ loading, currentUser }) {
+  const navButtons =
+    loading ? [] :
+    currentUser ? [
       {
         icon: <AccountBoxOutlinedIcon/>,
         text: 'Identifiers',
@@ -92,8 +102,8 @@ function SideNav() {
         text: 'Logout',
         href: '/logout',
       }
-    ]
-    : [
+    ] :
+    [
       {
         icon: <LoginOutlinedIcon/>,
         text: 'Login',
@@ -109,6 +119,7 @@ function SideNav() {
   return <Box sx={{
     // backgroundColor: 'success.main',
     backgroundColor: 'primary.dark',
+    minWidth: `min(10vw, 200px)`,
     maxWidth: `max(20vw, 400px)`,
     overflowX: 'auto',
   }}>
