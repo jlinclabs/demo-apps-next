@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 
 import { useCurrentUser } from '../lib/session'
-import useView from '../lib/useView'
+import { useView } from '../lib/views'
 import { useAction } from '../lib/actions'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
