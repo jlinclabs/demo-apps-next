@@ -78,12 +78,12 @@ export default withSessionRoute(async (req, res) => {
   // })
   let intervalId
   // TMP use postgres
-  intervalId = setInterval(
-    () => {
-      update()
-    },
-    10000
-  )
+  // intervalId = setInterval(
+  //   () => {
+  //     update()
+  //   },
+  //   10000
+  // )
   const unsub = () => { clearInterval(intervalId) }
 
   req.on('close', () => {

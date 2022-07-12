@@ -1,8 +1,37 @@
 import bcrypt from 'bcrypt'
 import prisma from '../lib/prisma'
-import users from './usersResource'
+// import users from './usersResource'
 
 const sessionResource = {
+
+  queries: {
+    async get(sessionId){
+      return await prisma.session.findUnique({
+        where: { id: sessionId },
+        select: {
+          id: true,
+          createdAt: true,
+          lastSeenAt: true,
+          user: true,
+          userId: true,
+        }
+      })
+    }
+  },
+
+  commands: {
+    async create(userId){
+      return await prisma.session.create({
+        data: { userId }
+      })
+    },
+    async delete(sessionId){
+      return await prisma.session.delete({
+        where: { id: sessionId }
+      })
+    }
+  },
+
   actions: {
 
     async signup({ session, email, password }){
