@@ -102,8 +102,7 @@ function AckContractSignatureForm({ contract, reloadContract }){
   const [signatureId, setSignatureId] = useState('')
 
   const ackContractSignature = useAckContractSignature({
-    onSuccess(contract){
-      // router.push(`/contracts/${contract.id}`)
+    onSuccess(){
       reloadContract()
     },
   })

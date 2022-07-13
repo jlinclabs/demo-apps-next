@@ -82,10 +82,9 @@ function SignupForm(){
       onChange={e => { setPasswordConfirmation(e.target.value) }}
       error={!!(passwordConfirmation && passwordConfirmation !== password)}
     />
-    <Stack spacing={2} direction="row-reverse" justifyContent="flex-end">
+    <Stack spacing={2} direction="row-reverse" mt={2}>
       <Button type="submit" variant="contained" >Submit</Button>
       <Button variant="text" component={Link} href="/login">login</Button>
-      <Button variant="text" component={Link} href="/reset-password" color="secondary">reset password</Button>
     </Stack>
   </Paper>
 }

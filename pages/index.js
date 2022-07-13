@@ -24,14 +24,12 @@ export default function Home() {
             : `Welcome to ${process.env.APP_NAME}`
           }
         </Typography>
-        <Typography variant="h6">
-          {`process.env.APP_NAME=${process.env.APP_NAME}`}
-        </Typography>
-        <Typography variant="h6" sx={{color: process.env.APP_COLOR}}>
-          {`process.env.APP_COLOR=${process.env.APP_COLOR}`}
-        </Typography>
-
-
+        {currentUser ? null : <>
+          <Stack spacing={2} mt={3}>
+            <Button variant="contained" component={Link} href="/login">Login</Button>
+            <Button variant="contained" component={Link} href="/signup">Signup</Button>
+          </Stack>
+        </>}
       </Paper>
     </Container>
   </Layout>

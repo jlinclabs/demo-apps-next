@@ -49,16 +49,7 @@ export default function Layout(props) {
   console.log(`currentUser => ${JSON.stringify(currentUser)}`)
 
   return (
-    <Box
-      sx={{
-        p: 0,
-        // display: 'flex',
-        // flexDirection: 'column',
-        // height: '100vh',
-        // width: '100vw',
-        // overflow: 'hidden',
-      }}
-    >
+    <Container maxWidth={false} disableGutters>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -79,27 +70,12 @@ export default function Layout(props) {
             : children
         }</Box>
       </Box>
-    </Box>
+    </Container>
   )
 }
 
 
 function SideNav({ loading, currentUser }) {
-  //   {loading
-  //     ?
-  //     : navButtons.map(({ icon, text, href }) =>
-  //       <ListItem key={text} disablePadding>
-  //         <ListItemButton component={Link} href={href}>
-  //           <ListItemIcon>
-  //             {icon}
-  //           </ListItemIcon>
-  //           <ListItemText primary={text} />
-  //         </ListItemButton>
-  //       </ListItem>
-  //     )
-  //   }
-  // </List>
-
   const navButtons = (
     loading ? (
       Array(3).fill().map((_, i) =>
@@ -121,7 +97,16 @@ function SideNav({ loading, currentUser }) {
       <Divider />
       <ListItem disablePadding>
         <ListItemButton component={Link} href="/profile">
-          <ListItemText primary={currentUser.email} />
+          <ListItemText {...{
+
+            primary: currentUser.email,
+            primaryTypographyProps: {
+              sx: {
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }
+            }
+          }}/>
         </ListItemButton>
       </ListItem>
       <NavButton {...{
@@ -147,26 +132,41 @@ function SideNav({ loading, currentUser }) {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'primary.dark',
-    minWidth: `min(10vw, 200px)`,
+    minWidth: `max(10vw, 175px)`,
     maxWidth: `max(20vw, 400px)`,
     overflowX: 'auto',
   }}>
     <Typography
       variant="h7"
       component="div"
-      sx={{ color: 'orange' }}
+      sx={{
+        position: 'absolute',
+        top: '10px',
+        left:  '0px',
+        color: 'orange',
+        textShadow: '0 0 4px black',
+        transform: 'rotate(320deg)',
+      }}
     >
-      {'BETA'}
+      {'ALPHA'}
     </Typography>
 
     <Link
-      underline="none" variant="h6" href="/"
+      underline="none"
+      variant="h6"
+      href="/"
       sx={{
+        mt: 3,
+        mb: 1,
         textAlign: 'center',
-        color: 'primary.light'
+        // color: 'primary.light',
+        color: 'inherit',
+        // textShadow: '0 0 4px black',
+        // color: 'black',
       }}
-    >{`${process.env.APP_NAME}`}</Link>
-
+    >
+      {`${process.env.APP_NAME}`}
+    </Link>
 
     <List sx={{
       display: 'flex',
@@ -180,7 +180,7 @@ function SideNav({ loading, currentUser }) {
 function NavButton({ text, href, icon }){
   return <ListItem key={text} disablePadding>
     <ListItemButton component={Link} href={href}>
-      <ListItemIcon>
+      <ListItemIcon sx={{minWidth: '30px'}}>
         {icon}
       </ListItemIcon>
       <ListItemText primary={text} />
