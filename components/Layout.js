@@ -21,6 +21,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Skeleton from '@mui/material/Skeleton'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import MailIcon from '@mui/icons-material/Mail'
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined'
@@ -84,96 +85,104 @@ export default function Layout(props) {
 
 
 function SideNav({ loading, currentUser }) {
-  const navButtons =
-    loading ? [] :
-    currentUser ? [
-      {
+  //   {loading
+  //     ?
+  //     : navButtons.map(({ icon, text, href }) =>
+  //       <ListItem key={text} disablePadding>
+  //         <ListItemButton component={Link} href={href}>
+  //           <ListItemIcon>
+  //             {icon}
+  //           </ListItemIcon>
+  //           <ListItemText primary={text} />
+  //         </ListItemButton>
+  //       </ListItem>
+  //     )
+  //   }
+  // </List>
+
+  const navButtons = (
+    loading ? (
+      Array(3).fill().map((_, i) =>
+        <Skeleton key={i} animation="wave" height="100px" />
+      )
+    ) :
+    currentUser ? <>
+      <NavButton {...{
         icon: <AccountBoxOutlinedIcon/>,
         text: 'Identifiers',
         href: '/identifiers',
-      },
-      {
+      }}/>
+      <NavButton {...{
         icon: <ArticleOutlinedIcon/>,
         text: 'Contracts',
         href: '/contracts',
-      },
-      {
+      }}/>
+      <Box sx={{ flex: '1 1'}}/>
+      <Divider />
+      <ListItem disablePadding>
+        <ListItemButton component={Link} href="/profile">
+          <ListItemText primary={currentUser.email} />
+        </ListItemButton>
+      </ListItem>
+      <NavButton {...{
         icon: <LogoutOutlinedIcon/>,
         text: 'Logout',
         href: '/logout',
-      }
-    ] :
-    [
-      {
+      }}/>
+    </> :
+    <>
+      <NavButton {...{
         icon: <LoginOutlinedIcon/>,
         text: 'Login',
         href: '/login',
-      },
-      {
+      }}/>
+      <NavButton {...{
         icon: <ArticleOutlinedIcon/>,
         text: 'Signup',
         href: '/signup',
-      },
-    ]
-
+      }}/>
+    </>
+  )
   return <Box sx={{
-    // backgroundColor: 'success.main',
+    display: 'flex',
+    flexDirection: 'column',
     backgroundColor: 'primary.dark',
     minWidth: `min(10vw, 200px)`,
     maxWidth: `max(20vw, 400px)`,
     overflowX: 'auto',
   }}>
-    <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-      <Link href="/">{`${process.env.APP_NAME}`}</Link>
-    </Typography>
-    <Typography variant="h7" component="div" sx={{ color: 'orange' }}>
+    <Typography
+      variant="h7"
+      component="div"
+      sx={{ color: 'orange' }}
+    >
       {'BETA'}
     </Typography>
-    <List>
-      {navButtons.map(({ icon, text, href }) =>
-        <ListItem key={text} disablePadding>
-          <ListItemButton component={Link} href={href}>
-            <ListItemIcon>
-              {icon}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItemButton>
-        </ListItem>
-      )}
-    </List>
+
+    <Link
+      underline="none" variant="h6" href="/"
+      sx={{
+        textAlign: 'center',
+        color: 'primary.light'
+      }}
+    >{`${process.env.APP_NAME}`}</Link>
+
+
+    <List sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1 1'
+    }}>{navButtons}</List>
   </Box>
 }
 
-
-// function LoggedInThing(){
-//   return <div>
-//     <IconButton
-//       size="large"
-//       aria-label="account of current user"
-//       aria-controls="menu-appbar"
-//       aria-haspopup="true"
-//       onClick={handleMenu}
-//       color="inherit"
-//     >
-//       <AccountCircle />
-//     </IconButton>
-//     <Menu
-//       id="menu-appbar"
-//       anchorEl={anchorEl}
-//       anchorOrigin={{
-//         vertical: 'top',
-//         horizontal: 'right',
-//       }}
-//       keepMounted
-//       transformOrigin={{
-//         vertical: 'top',
-//         horizontal: 'right',
-//       }}
-//       open={Boolean(anchorEl)}
-//       onClose={handleClose}
-//     >
-//       <MenuItem onClick={handleClose}>Profile</MenuItem>
-//       <MenuItem onClick={handleClose}>My account</MenuItem>
-//     </Menu>
-//   </div>
-// }
+function NavButton({ text, href, icon }){
+  return <ListItem key={text} disablePadding>
+    <ListItemButton component={Link} href={href}>
+      <ListItemIcon>
+        {icon}
+      </ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItemButton>
+  </ListItem>
+}
