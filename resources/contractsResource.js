@@ -5,19 +5,31 @@ const contracts = {
   queries: {
 
     async byId({ id }){
-      const contract = await db.contract.findUnique({
-        where: { id },
-      })
-      if (!contract) return
-      await decorateContract(contract)
+      const [contractRecord, jlinxContract] = await Promise.all([
+        db.contract.findUnique({ where: { id } }),
+        jlinx.contracts.get(id),
+      ])
+      if (!jlinxContract) return
+      const contract = {...jlinxContract.value}
+      if (contractRecord){
+        contract.userId = contractRecord.userId
+        contract.createdAt = contractRecord.createdAt
+      }
+      // if (!contract) return
+      // await decorateContract(contract)
       return contract
     },
 
-    async forUser(userId){
+    async forUser({ userId }){
       const contracts = await db.contract.findMany({
         where: { userId }
       })
-      await Promise.all(contracts.map(decorateContract))
+      await Promise.all(
+        contracts.map(async contract => {
+          const jlinxContract = await jlinx.contracts.get(contract.id)
+          Object.assign(contract, jlinxContract.value)
+        })
+      )
       return contracts
     }
   },
@@ -43,7 +55,7 @@ const contracts = {
       })
     },
 
-    async sign({ contractId }){
+    async sign({ contractId, userId, identifierDid }){
 
     }
   },
@@ -56,12 +68,20 @@ const contracts = {
         userId: currentUser.id,
       })
     },
+    async sign({ currentUser, contractId, identifierDid }){
+      // TODO ensure signAs identifier did is owned by us
+      return await contracts.commands.sign({
+        userId: currentUser.id,
+        contractId,
+        identifierDid,
+      })
+    }
   },
 
   views: {
     'mine': async ({ currentUser }) => {
       return currentUser
-        ? await contracts.queries.forUser(currentUser.id)
+        ? await contracts.queries.forUser({ userId: currentUser.id })
         : []
     },
     ':id': async ({ id }) => {
@@ -73,8 +93,3 @@ const contracts = {
 
 export default contracts
 
-
-async function decorateContract(contract){
-  const jlinxContract = await jlinx.contracts.get(contract.id)
-  Object.assign(contract, jlinxContract.value)
-}

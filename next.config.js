@@ -1,5 +1,5 @@
 const nextConfig = {
-  distDir: 'build',
+  distDir: `build/${process.env.APP_NAME}`,
 
   httpAgentOptions: {
     keepAlive: true,

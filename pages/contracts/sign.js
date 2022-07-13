@@ -14,10 +14,12 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
 import { useContract, useSignContract } from '../../lib/contractHooks'
+import { useMyIdentifiers } from '../../lib/identifierHooks'
 import Layout from '../../components/Layout'
 import Link from '../../components/Link'
 import ErrorMessage from '../../components/ErrorMessage'
 import ActionForm from '../../components/ActionForm'
+import IdentifierProfile from '../../components/IdentifierProfile'
 import InspectObject from '../../components/InspectObject'
 
 export default function SignContractPage({ router }) {
@@ -47,7 +49,7 @@ function LookupContractOfferingForm({ router }){
       Sign a Contract
     </Typography>
     <TextField
-      labelId="Contract Id"
+      label="Contract Id"
       margin="normal"
       required
       fullWidth
@@ -64,27 +66,65 @@ function LookupContractOfferingForm({ router }){
 
 
 function SignContractOfferingForm({ router, contractId }){
-  const [contract, {}] = useContract(contractId)
+  const [identifiers = []] = useMyIdentifiers()
+  const [identifierDid, setIdentifierDid] = useState('')
+  const [contract, { loading }] = useContract(contractId)
   const signContract = useSignContract({
     onSuccess(){
 
     }
   })
+  if (loading) return <span>Loading…</span>
+  const disabled = signContract.pending
   return <Paper {...{
     elevation: 3,
     component: 'form',
     sx: { p: 2, mt: 2 },
     onSubmit(event){
       event.preventDefault()
-      signContract({ id: contractId })
+      signContract({
+        contractId,
+        identifierDid,
+      })
     }
   }}>
-    <Typography component="h1" variant="h3">
+    <Typography component="h1" variant="h3" mb={3}>
       Sign Contract Offering
     </Typography>
-    <InspectObject object={contract}/>
+
+    <Typography paragraph>
+      {`The contract`}<br/>
+      <Link href={contract.contractUrl} passHref>{contract.contractUrl}</Link><br/>
+      {`is being offered to you by:`}<br/>
+    </Typography>
+    <Paper elevation={1}>
+      <IdentifierProfile identifier={contract.offerer}/>
+    </Paper>
+
+    <Typography variant="body1" sx={{my: 2}}>
+      Which identifier do you want to sign this contract as?
+    </Typography>
+    <FormControl fullWidth sx={{mb:3}}>
+      <InputLabel id="identifierDidLabel">Identifier</InputLabel>
+      <Select
+        name="identifierDid"
+        labelId="identifierDidLabel"
+        disabled={disabled}
+        autoFocus
+        value={identifierDid}
+        onChange={e => { setIdentifierDid(e.target.value) }}
+      >
+        {identifiers.map(identifier =>
+          <MenuItem
+            key={identifier.did}
+            value={identifier.did}
+          >{identifier.did}</MenuItem>
+        )}
+      </Select>
+    </FormControl>
     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
       <Button type="submit" variant="contained">{`Sign Contract`}</Button>
     </Box>
+
   </Paper>
 }
