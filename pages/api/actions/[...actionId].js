@@ -10,10 +10,7 @@ export default withSessionRoute(async (req, res) => {
       options,
       session: req.session,
     })
-
     const [resourceName, actionName] = parseActionId(actionId)
-    console.log({ resourceName, actionName })
-
     const resource = resources[resourceName]
     if (!resource){
       bail(404, `unknown resource "${resourceName}"`)
@@ -27,10 +24,13 @@ export default withSessionRoute(async (req, res) => {
       session: req.session,
       currentUser: req.session.user,
     })
-    console.log({ result })
-    return res.status(200).json(
-      typeof result === 'undefined' ? {} : result
-    )
+    console.log('ACTION COMPLETE', {
+      actionId,
+      options,
+      session: req.session,
+      result,
+    })
+    return res.status(200).json({ result })
 
   }catch(error){
     console.error(error)

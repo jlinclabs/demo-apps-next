@@ -14,34 +14,31 @@ import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
 import { useAction } from '../../lib/actions'
+import { useMyIdentifiers } from '../../lib/identifierHooks'
 import Layout from '../../components/Layout'
 import Link from '../../components/Link'
 import ErrorMessage from '../../components/ErrorMessage'
 import ActionForm from '../../components/ActionForm'
 import InspectObject from '../../components/InspectObject'
 
-export default function OfferContractPage() {
+export default function OfferContractPage({ router }) {
   return <Layout title="Offer A Contract" requireLoggedIn>
     <Container maxwidth="lg">
-      <Typography variant="h3">Offer A Contract</Typography>
-      <OfferContractForm />
+      <OfferContractForm {...{ router }}/>
     </Container>
   </Layout>
 }
 
 
 
-function OfferContractForm(){
-  const identifiers = []
+function OfferContractForm({ router }){
+  const [identifiers = []] = useMyIdentifiers()
 
   const [ contractUrl, setContractUrl ] = useState('https://contracts.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
   const [ identifierDid, setIdentifierDid ] = useState('')
   const offerContract = useAction('contracts.offer', {
     onSuccess(contract){
-      console.log({ contract })
-      debugger
-      // reloadCurrentUser()
-      // if (callbacks.onSuccess) callbacks.onSuccess(result)
+      router.push(`/contracts/${contract.id}`)
     },
   })
 
@@ -58,8 +55,8 @@ function OfferContractForm(){
       })
     }
   }}>
-    <Typography component="h1" variant="h5">
-      Create Contract
+    <Typography component="h1" variant="h3">
+      Offer a Contract
     </Typography>
     <Typography variant="body1" sx={{my: 2}}>
       Which identifier do you want to offer this contract as?
@@ -97,6 +94,7 @@ function OfferContractForm(){
       value={contractUrl}
       onChange={e => { setContractUrl(e.target.value) }}
     />
+    {offerContract.error && <ErrorMessage error={offerContract.error} />}
     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
       <Button type="submit" variant="contained">{`Create`}</Button>
     </Box>
