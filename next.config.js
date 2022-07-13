@@ -1,6 +1,4 @@
 const nextConfig = {
-  distDir: `build/${process.env.APP_NAME}`,
-
   httpAgentOptions: {
     keepAlive: true,
   },
@@ -15,6 +13,10 @@ const nextConfig = {
     // SESSION_SECRET: process.env.SESSION_SECRET,
     // DATABASE_URL: process.env.DATABASE_URL,
   }
+}
+
+if (process.env.NODE_ENV === 'development'){
+  nextConfig.distDir = `build/${process.env.APP_NAME}`
 }
 
 module.exports = nextConfig
