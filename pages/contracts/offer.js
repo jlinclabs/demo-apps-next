@@ -4,21 +4,101 @@ import Head from 'next/head'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
+import { useAction } from '../../lib/actions'
 import Layout from '../../components/Layout'
 import Link from '../../components/Link'
 import ErrorMessage from '../../components/ErrorMessage'
+import ActionForm from '../../components/ActionForm'
 import InspectObject from '../../components/InspectObject'
 
 export default function OfferContractPage() {
   return <Layout title="Offer A Contract" requireLoggedIn>
     <Container maxwidth="lg">
       <Typography variant="h3">Offer A Contract</Typography>
-
+      <OfferContractForm />
     </Container>
   </Layout>
 }
 
+
+
+function OfferContractForm(){
+  const identifiers = []
+
+  const [ contractUrl, setContractUrl ] = useState('https://contracts.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
+  const [ identifierDid, setIdentifierDid ] = useState('')
+  const offerContract = useAction('contracts.offer', {
+    onSuccess(contract){
+      console.log({ contract })
+      debugger
+      // reloadCurrentUser()
+      // if (callbacks.onSuccess) callbacks.onSuccess(result)
+    },
+  })
+
+  const disabled = offerContract.pending
+  return <Paper {...{
+    elevation: 3,
+    component: 'form',
+    sx: { p: 2, m: 1 },
+    onSubmit(event){
+      event.preventDefault()
+      offerContract({
+        contractUrl,
+        identifierDid,
+      })
+    }
+  }}>
+    <Typography component="h1" variant="h5">
+      Create Contract
+    </Typography>
+    <Typography variant="body1" sx={{my: 2}}>
+      Which identifier do you want to offer this contract as?
+    </Typography>
+    <FormControl fullWidth>
+      <InputLabel id="identifierDidLabel">Identifier</InputLabel>
+      <Select
+        name="identifierDid"
+        labelId="identifierDidLabel"
+        disabled={disabled}
+        autoFocus
+        value={identifierDid}
+        onChange={e => { setIdentifierDid(e.target.value) }}
+      >
+        {identifiers.map(identifier =>
+          <MenuItem
+            key={identifier.did}
+            value={identifier.did}
+          >{identifier.did}</MenuItem>
+        )}
+      </Select>
+    </FormControl>
+    <Typography variant="body1" sx={{my: 2}}>
+      Which contract do you want to offer?
+    </Typography>
+
+    <TextField
+      label="Contract URL"
+      disabled={disabled}
+      margin="normal"
+      required
+      fullWidth
+      name="contractUrl"
+      placeholder="https://contracts.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md"
+      value={contractUrl}
+      onChange={e => { setContractUrl(e.target.value) }}
+    />
+    <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+      <Button type="submit" variant="contained">{`Create`}</Button>
+    </Box>
+  </Paper>
+}

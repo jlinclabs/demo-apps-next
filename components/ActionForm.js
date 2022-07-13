@@ -9,17 +9,20 @@ export default function ActionForm({
   ...props
 }){
 
-  const onSubmit = event => {
-    event.preventDefault()
-    const form = event.target.closest('form')
-    console.log('TAKE ACTION', {
-      action,
-      options,
-      form,
-    })
-  }
+  // const onSubmit = event => {
+  //   event.preventDefault()
+  //   const form = event.target.closest('form')
+  //   console.log('TAKE ACTION', {
+  //     action,
+  //     options,
+  //     form,
+  //   })
+  // }
+
+  const error = null
 
   return <form {...{...props, onSubmit}}>
+    <ErrorMessage error={error}/>
     {children}
   </form>
 }
