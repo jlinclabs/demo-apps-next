@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+exec concurrently \
+  --names "cat-walkers,bad-birders,dope-dogs" \
+  "dotenv -e ./dev/apps/cat-walkers/.env $@" \
+  "dotenv -e ./dev/apps/bad-birders/.env $@" \
+  "dotenv -e ./dev/apps/dope-dogs/.env $@"

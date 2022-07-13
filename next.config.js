@@ -1,4 +1,6 @@
 const nextConfig = {
+  distDir: 'build',
+
   httpAgentOptions: {
     keepAlive: true,
   },

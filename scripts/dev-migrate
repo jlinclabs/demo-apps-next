@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+dotenv -e ./dev/apps/cat-walkers/.env npx prisma migrate dev
+dotenv -e ./dev/apps/bad-birders/.env npx prisma migrate dev
+dotenv -e ./dev/apps/dope-dogs/.env npx prisma migrate dev

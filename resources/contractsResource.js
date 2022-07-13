@@ -9,24 +9,16 @@ const contracts = {
         where: { id },
       })
       if (!contract) return
-      const jlinxContract = await jlinx.contracts.get(contract.id)
-      // await jlinxContract.update()
-      console.log('GET CONTRACT', { jlinxContract })
-      Object.assign(contract, jlinxContract.value)
-      // Object.assign(contract, {
-      //   state: jlinxContract.state,
-      //   host: jlinxContract.host,
-      //   identifierDid: jlinxContract.identifierDid,
-      //   contractUrl: jlinxContract.contractUrl,
-      // })
-      console.log('GET CONTRACT', id, contract)
+      await decorateContract(contract)
       return contract
     },
 
     async forUser(userId){
-      return db.contract.findMany({
+      const contracts = await db.contract.findMany({
         where: { userId }
       })
+      await Promise.all(contracts.map(decorateContract))
+      return contracts
     }
   },
 
@@ -37,18 +29,12 @@ const contracts = {
         contractUrl,
         userId,
       } = options
-      console.log('CREATE CONTRACT', {
-        identifierDid,
-        contractUrl,
-        userId,
-      })
       // TODO ensure identifierDid exists and is ours
       const contract = await jlinx.contracts.create()
       await contract.offerContract({
         identifier: identifierDid,
         contractUrl,
       })
-      console.log({ contract })
       return await db.contract.create({
         data: {
           id: contract.id,
@@ -56,6 +42,10 @@ const contracts = {
         },
       })
     },
+
+    async sign({ contractId }){
+
+    }
   },
 
   actions: {
@@ -82,3 +72,9 @@ const contracts = {
 
 
 export default contracts
+
+
+async function decorateContract(contract){
+  const jlinxContract = await jlinx.contracts.get(contract.id)
+  Object.assign(contract, jlinxContract.value)
+}

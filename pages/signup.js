@@ -10,7 +10,6 @@ import TextField from '@mui/material/TextField'
 import Layout from '../components/Layout'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
-import InspectObject from '../components/InspectObject'
 import { useCurrentUser, useSignup } from '../lib/session'
 
 export default function Signup() {
@@ -88,7 +87,5 @@ function SignupForm(){
       <Button variant="text" component={Link} href="/login">login</Button>
       <Button variant="text" component={Link} href="/reset-password" color="secondary">reset password</Button>
     </Stack>
-
-    <InspectObject object={{...signup}}/>
   </Paper>
 }

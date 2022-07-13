@@ -171,7 +171,8 @@ function SideNav({ loading, currentUser }) {
     <List sx={{
       display: 'flex',
       flexDirection: 'column',
-      flex: '1 1'
+      flex: '1 1',
+      padding: '0',
     }}>{navButtons}</List>
   </Box>
 }

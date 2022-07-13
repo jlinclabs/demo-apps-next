@@ -3,9 +3,8 @@ import { withSessionRoute } from '../../../lib/withSession'
 import resources from '../../../resources'
 
 export default withSessionRoute(async (req, res) => {
-  const subId = req.query.subId
   const viewId = req.query.viewId.join('/')
-  console.log('GET VIEW', { subId, viewId })
+  console.log('GET VIEW', { viewId })
 
   const [resourceName, viewPart] = parseViewId(viewId)
 
