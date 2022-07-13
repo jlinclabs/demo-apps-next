@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import Head from 'next/head'
-
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
@@ -13,8 +11,8 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 
-import { useAction } from '../../lib/actions'
 import { useMyIdentifiers } from '../../lib/identifierHooks'
+import { useOfferContract } from '../../lib/contractHooks'
 import Layout from '../../components/Layout'
 import Link from '../../components/Link'
 import ErrorMessage from '../../components/ErrorMessage'
@@ -36,7 +34,7 @@ function OfferContractForm({ router }){
 
   const [ contractUrl, setContractUrl ] = useState('https://contracts.io/sisa-suyF9tPmVrtuuLn3R4XdzGXMZN6aFfCIXuXwGpAHtCw.md')
   const [ identifierDid, setIdentifierDid ] = useState('')
-  const offerContract = useAction('contracts.offer', {
+  const offerContract = useOfferContract({
     onSuccess(contract){
       router.push(`/contracts/${contract.id}`)
     },

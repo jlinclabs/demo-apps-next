@@ -68,14 +68,20 @@ function LookupContractOfferingForm({ router }){
 function SignContractOfferingForm({ router, contractId }){
   const [identifiers = []] = useMyIdentifiers()
   const [identifierDid, setIdentifierDid] = useState('')
+  const [signatureId, setSignatureId] = useState('')
   const [contract, { loading }] = useContract(contractId)
   const signContract = useSignContract({
-    onSuccess(){
-
+    onSuccess({ signatureId }){
+      console.log({ signatureId })
+      setSignatureId(signatureId)
     }
   })
   if (loading) return <span>Loading…</span>
   const disabled = signContract.pending
+
+  if (signatureId){
+
+  }
   return <Paper {...{
     elevation: 3,
     component: 'form',
@@ -101,30 +107,63 @@ function SignContractOfferingForm({ router, contractId }){
       <IdentifierProfile identifier={contract.offerer}/>
     </Paper>
 
-    <Typography variant="body1" sx={{my: 2}}>
-      Which identifier do you want to sign this contract as?
+    <Typography paragraph>
+      <Link
+        passHref
+        href={`${contract.jlinxHost}/${contract.id}/stream`}
+        target="_blank"
+      >PUBLIC RECORD</Link>
     </Typography>
-    <FormControl fullWidth sx={{mb:3}}>
-      <InputLabel id="identifierDidLabel">Identifier</InputLabel>
-      <Select
-        name="identifierDid"
-        labelId="identifierDidLabel"
-        disabled={disabled}
-        autoFocus
-        value={identifierDid}
-        onChange={e => { setIdentifierDid(e.target.value) }}
-      >
-        {identifiers.map(identifier =>
-          <MenuItem
-            key={identifier.did}
-            value={identifier.did}
-          >{identifier.did}</MenuItem>
-        )}
-      </Select>
-    </FormControl>
-    <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-      <Button type="submit" variant="contained">{`Sign Contract`}</Button>
-    </Box>
+
+    {signatureId
+      ? <>
+        <Typography variant="h2" sx={{mt: 2}}>Signed!</Typography>
+        <Typography variant="h5">Just one more step:</Typography>
+        <Typography variant="h6">
+          Give this Signature ID to the contract offerer:
+        </Typography>
+        <Box sx={{
+          '> input': {
+            outline: 'none',
+            width: '27em',
+            fontFamily: 'monospace',
+            fontSize: '20px',
+            p: 1,
+          }
+        }}>
+          <input type="text" readOnly value={signatureId} onClick={e => { e.target.select() }}/>
+        </Box>
+      </>
+      : <>
+        <Typography variant="body1" sx={{my: 2}}>
+          Which identifier do you want to sign this contract as?
+        </Typography>
+        <FormControl fullWidth sx={{mb:3}}>
+          <InputLabel id="identifierDidLabel">Identifier</InputLabel>
+          <Select
+            name="identifierDid"
+            labelId="identifierDidLabel"
+            disabled={disabled}
+            autoFocus
+            value={identifierDid}
+            onChange={e => { setIdentifierDid(e.target.value) }}
+          >
+            {identifiers.map(identifier =>
+              <MenuItem
+                key={identifier.did}
+                value={identifier.did}
+              >{identifier.did}</MenuItem>
+            )}
+          </Select>
+        </FormControl>
+        <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+          <Button type="submit" variant="contained">{`Sign Contract`}</Button>
+        </Box>
+      </>
+    }
+
+    <hr/>
+    <InspectObject object={contract}/>
 
   </Paper>
 }
