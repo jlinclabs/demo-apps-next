@@ -6,7 +6,7 @@ const Link = React.forwardRef((props, ref) => {
   const {
     href,
     as,
-    passHref,
+    passHref = true,
     prefetch,
     replace,
     scroll,
@@ -27,5 +27,7 @@ const Link = React.forwardRef((props, ref) => {
     <MUILink {...muiLinkProps} ref={ref}/>
   </NextLink>
 })
+
+Link.displayName = 'Link'
 
 export default Link

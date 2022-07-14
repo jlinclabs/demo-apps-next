@@ -9,7 +9,7 @@ import { useCurrentUser, useLogout } from '../lib/session'
 export default function Home() {
   useCurrentUser({ redirectToIfNotFound: '/' })
   const logout = useLogout()
-  useEffect(() => { logout() }, [])
+  useEffect(() => { logout() }, [logout])
 
   return <Layout>
     <Head>

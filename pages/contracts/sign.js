@@ -18,7 +18,6 @@ import { useMyIdentifiers } from '../../lib/identifierHooks'
 import Layout from '../../components/Layout'
 import Link from '../../components/Link'
 import ErrorMessage from '../../components/ErrorMessage'
-import ActionForm from '../../components/ActionForm'
 import IdentifierProfile from '../../components/IdentifierProfile'
 import InspectObject from '../../components/InspectObject'
 
@@ -109,7 +108,6 @@ function SignContractOfferingForm({ router, contractId }){
 
     <Typography paragraph>
       <Link
-        passHref
         href={`${contract.jlinxHost}/${contract.id}/stream`}
         target="_blank"
       >PUBLIC RECORD</Link>

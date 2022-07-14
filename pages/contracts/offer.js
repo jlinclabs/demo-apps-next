@@ -16,7 +16,6 @@ import { useOfferContract } from '../../lib/contractHooks'
 import Layout from '../../components/Layout'
 import Link from '../../components/Link'
 import ErrorMessage from '../../components/ErrorMessage'
-import ActionForm from '../../components/ActionForm'
 import InspectObject from '../../components/InspectObject'
 
 export default function OfferContractPage({ router }) {

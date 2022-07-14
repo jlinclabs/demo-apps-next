@@ -53,7 +53,6 @@ function Contract({ id }){
 
     <Typography paragraph>
       <Link
-        passHref
         href={`${contract.jlinxHost}/${contract.id}/stream`}
         target="_blank"
       >PUBLIC RECORD</Link>
@@ -85,7 +84,6 @@ function Contract({ id }){
       </Paper>
       <Typography paragraph>
         <Link
-          passHref
           href={`${contract.jlinxHost}/${contract.signatureId}/stream`}
           target="_blank"
         >PUBLIC RECORD</Link>
